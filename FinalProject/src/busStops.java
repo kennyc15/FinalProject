@@ -1,8 +1,8 @@
 
 public class busStops {
 	
-	public int stop_id;
-	public int stop_code;
+	public String stop_id;
+	public String stop_code;
 	public String stop_name;
 	public String stop_desc;
 	public double stop_lat;
@@ -10,10 +10,10 @@ public class busStops {
 	public String zone_id;
 	public String stop_url;
 	public int location_type;
-	public int parent_station;
+	public String parent_station;
 	
-	busStops(int stopID, int stopCode, String stopName, String stopDesc, double stopLat,
-			double stopLon, String zoneID, String stopURL, int locationType, int parentStation) {
+	busStops(String stopID, String stopCode, String stopName, String stopDesc, double stopLat,
+			double stopLon, String zoneID, String stopURL, int locationType, String parentStation) {
 		
 	this.stop_id = stopID;
 	this.stop_code = stopCode;
