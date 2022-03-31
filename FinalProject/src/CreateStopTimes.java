@@ -2,8 +2,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CreateStopTimes {
+	
 	
 	public static ArrayList<StopTimes> createStopTimes(String filename){
 		
@@ -17,10 +20,22 @@ public class CreateStopTimes {
 		while (scan.hasNextLine()) {
 			
 		String[] line = scan.nextLine().split(",");
+		
 			
 		int tripid = Integer.parseInt(line[0]);
-		String arrival_time = line[1];
-		String departure_time = line[2];
+
+		//validate time to correct format hh:mm:ss
+		String arrival_time = "-1";
+		if (validTime(line[1])) {
+		arrival_time = line[1];
+		}
+		
+		//validate time to correct format hh:mm:ss
+		String departure_time = "-1";
+		if (validTime(line[2])) {
+		departure_time = line[2];
+		}
+		
 		int stop_id = Integer.parseInt(line[3]);
 		String stop_sequence= line[4];
 		String stopHead = line[5];
@@ -48,13 +63,56 @@ public class CreateStopTimes {
 		
 	}
 	
+	public static String getArrivalTime(StopTimes st) {
+		
+		return st.arrival_time;
+		
+	}
+	
 	public static void main(String args[]) throws FileNotFoundException {
 		
-		System.out.println(createStopTimes("stop_times.txt").get(3));
+		createStopTimes("stop_times.txt");
 	
 	}
 	
+	 public static boolean validTime(String time) {
+		 
+		 String format = "([01]?[0-9]|2[0-3])|:[0-5][0-9]:[0-5][0-9]";
+		 Pattern p = Pattern.compile(format);
+		 if (time == null) {
+	            return false;
+	   }
+		 Matcher m1 = p.matcher(time);
 	
+	        return m1.matches();	
 	}
+	 
+	 //Find matching Stop Times objects for given arrival time
+	 public static ArrayList<StopTimes> searchByArrivalTime(String input){
+		 
+		 ArrayList<StopTimes> st = new ArrayList<StopTimes>();
+		 ArrayList<StopTimes> allSt = createStopTimes("stop_times.txt");
+		 
+		 String arrTime = input;
+		 
+		 for(int i = 0; i < allSt.size();i++) {
+			 
+			 String arrivalTime = getArrivalTime(allSt.get(i));
+			
+			 if (arrivalTime == arrTime) {
+				 st.add(allSt.get(i));
+				
+			 }
+		 }
+		 
+		return st;
+	 }
+	 
+	// public static ArrayList<StopTimes> sortByStopId(ArrayList<StopTimes> st){
+		 
+		 
+	 //}
+	 
+}
 
 
