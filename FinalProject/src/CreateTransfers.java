@@ -36,19 +36,8 @@ public class CreateTransfers {
 		}
 	}
 
-	
-	
-	public static String getFromStop(Transfers trans) {
-		return trans.from_stop_id;
-	}
-	
-	public static int getMinTransTime(Transfers trans) {
-		return trans.min_transfer_time;
-	}
-	
 		public static void main(String args[]) throws FileNotFoundException {
 		
-		System.out.println(getMinTransTime(createTransfers("transfers.txt").get(5)));
 		
 	}
 }

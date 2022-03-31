@@ -1,4 +1,4 @@
-import java.io.FileNotFoundException;
+/*import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -56,28 +56,16 @@ public class CreateStopTimes {
 		return stopTimesDetails;
 	}
 	}
-	
-	public static int getTripId(StopTimes st) {
-		
-		return st.trip_id;
-		
-	}
-	
-	public static String getArrivalTime(StopTimes st) {
-		
-		return st.arrival_time;
-		
-	}
-	
+
 	public static void main(String args[]) throws FileNotFoundException {
 		
-		createStopTimes("stop_times.txt");
+		//System.out.println(getArrivalTime(createStopTimes("stop_times.txt").get(0)));
 	
 	}
 	
 	 public static boolean validTime(String time) {
 		 
-		 String format = "([01]?[0-9]|2[0-3])|:[0-5][0-9]:[0-5][0-9]";
+		 String format = "((\\s?)[0-9]|[01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
 		 Pattern p = Pattern.compile(format);
 		 if (time == null) {
 	            return false;
@@ -99,8 +87,11 @@ public class CreateStopTimes {
 			 
 			 String arrivalTime = getArrivalTime(allSt.get(i));
 			
+			// System.out.println(arrivalTime);
+			 //System.out.println(input);
 			 if (arrivalTime == arrTime) {
 				 st.add(allSt.get(i));
+				 //System.out.println(allSt.get(i).toString());
 				
 			 }
 		 }
@@ -113,6 +104,6 @@ public class CreateStopTimes {
 		 
 	 //}
 	 
-}
+}*/
 
 

@@ -16,6 +16,16 @@ public class Transfers {
 	
 		
 		}
+		
+		public static String getFromStop(Transfers trans) {
+			return trans.from_stop_id;
+		}
+		
+		public static int getMinTransTime(Transfers trans) {
+			return trans.min_transfer_time;
+		}
+		
+		
 		}
 
 
