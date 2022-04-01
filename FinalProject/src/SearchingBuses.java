@@ -3,6 +3,12 @@ import java.util.Arrays;
 
 public class SearchingBuses extends StopTimes{
  
+	SearchingBuses(int tripId, String arrivalTime, String departureTime, int stopId, String stopSeq, String stopHead,
+			String pickup, String dropOff, String shapeDist) {
+		super(tripId, arrivalTime, departureTime, stopId, stopSeq, stopHead, pickup, dropOff, shapeDist);
+		// TODO Auto-generated constructor stub
+	}
+
 	static ArrayList<StopTimes> stopTimes = createStopTimes("stop_times.txt");
 	
 	
