@@ -40,4 +40,8 @@ public class TST<Value>
 	 else x.val = val;
 	 return x;
 	 }
+	 
+	 public static void main (String[] args) {
+		 
+}
 }

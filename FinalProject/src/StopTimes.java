@@ -1,6 +1,8 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -107,7 +109,8 @@ public class StopTimes {
 
 	public static void main(String args[]) throws FileNotFoundException {
 		
-		//System.out.println(getArrivalTime(createStopTimes("stop_times.txt").get(0)));
+		ArrayList<StopTimes> st = searchByArrivalTime("05:25:25");
+		printStopTimes(st);
 	
 	}
 	
@@ -123,8 +126,83 @@ public class StopTimes {
 	        return m1.matches();	
 	}
 	 
+	 //method to find Stop Times object with matching arrival time
 
+	public static ArrayList<StopTimes> searchByArrivalTime(String arrTime) {
+		 
+		 ArrayList<StopTimes> st = new ArrayList<StopTimes>();
+		 ArrayList<StopTimes> st2 = new ArrayList<StopTimes>();
+		 if (arrTime != null && validTime(arrTime)) {
+		 ArrayList<StopTimes> stopTimes = createStopTimes("stop_times.txt");
+		 for (int i = 0; i<stopTimes.size();i++) {
+			 if (getArrivalTime(stopTimes.get(i)).equals(arrTime) ||
+				("0" + getArrivalTime(stopTimes.get(i)).trim()).equals(arrTime)) {
+				 st.add(stopTimes.get(i));
+			 }
+		 }
+		 int[] tripids =new int[st.size()];
+		 for (int i = 0; i< st.size();i++) {
+			 tripids[i] = st.get(i).trip_id;
+		 }
+ 
+		 sortTripIds(tripids);
+		 
+		 //Creates new Array List of Stop Times sorted by Trip ID
+		 for (int i = 0; i< st.size();i++) {
+			 for(int j = 0; j<st.size();j++) {
+				 if (st.get(j).trip_id == tripids[i]) {
+					 st2.add(st.get(j));
+				 }
+			 }
+		 }
+		 }
+		 
+		 else { System.out.println("Please enter valid time as HH:MM:SS");
+		 }
+	
+		 return st2;
+		 
+	 }
 	 
+	 //Method will print details of a list of Stop Times Objects
+	 public static void printStopTimes(ArrayList<StopTimes> st) {
+		 if (st != null) {
+			 for (int i = 0; i<st.size();i++) {
+				 System.out.printf("*********\n Trip ID:%d\n Arrival Time:%s\n Departure Time:%s\n"
+				 		+ " Stop ID:%d\n Stop Sequence:%s\n Stop Head:%s\n"
+				 		+ " PickUp:%s\n Drop Off:%s\n\n",st.get(i).trip_id,st.get(i).arrival_time,
+				 		st.get(i).departure_time, st.get(i).stop_id, st.get(i).stop_sequence,
+				 		st.get(i).stop_headsign,st.get(i).pickup_type, st.get(i).drop_off_type);
+			 }
+		 }
+		 else {
+			 System.out.println("No trips match this search.");
+		 }
+	 }
+	 
+	 public static void sortTripIds(int[] trips) {
+
+	    	int temp;
+	    	for (int i = 1; i < trips.length; i++) {
+	    		for(int j = i ; j > 0 ; j--){
+	    			if(trips[j] < trips[j-1]){
+	    				temp = trips[j];
+	    				trips[j] = trips[j-1];
+	    				trips[j-1] = temp;
+	    			}
+	    		}
+	    	}
+	 }
+	 
+	 static boolean isEmpty(double a[])
+		{
+			if(a == null)
+			{
+				return true;
+			}
+			else{return false; }
+		}
+
 
 }
 

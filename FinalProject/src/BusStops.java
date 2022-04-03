@@ -48,7 +48,7 @@ public class BusStops {
 		if(!line[1].contains(" ")){
 			stopcode = line[1];
 		}
-		String stopname = line[2];
+		String stopname = formatStopName(line[2]);
 		String stopDesc = line[3];
 		double stoplat = Double.parseDouble(line[4]);
 		double stopLon = Double.parseDouble(line[5]);
@@ -68,7 +68,7 @@ public class BusStops {
 	}
 	}
 	
-	public static void formatStopName(String str) {
+	public static String formatStopName(String str) {
 		
 		String first = str.split(" ")[0];
 		String second = str.split(" ")[1];
@@ -83,14 +83,45 @@ public class BusStops {
 			str = str.replace(second, "").trim();
 			str = str + " " + second;
 		}
-		System.out.println(str);
+		return str;
 		}
 	
-	public static void main (String[] args) {
-		formatStopName("WB HASTINGS ST FS HOLDOM AVE-") ;
+	//Prints details of multiple stops
+	public static void printBusStops(ArrayList<BusStops> bs) {
+		 if (bs != null) {
+			 for (int i = 0; i<bs.size();i++) {
+				 System.out.printf("*********\n Stop ID:%s\n Stop Code:%s\n Stop Name:%s\n"
+				 		+ " Stop Desc:%s\n Stop Lat:%.6f\n Stop Lon:%.6f\n"
+				 		+ " Zone ID:%s\n\n",bs.get(i).stop_id,bs.get(i).stop_code,
+				 		bs.get(i).stop_name, bs.get(i).stop_desc, bs.get(i).stop_lat,
+				 		bs.get(i).stop_lon,bs.get(i).zone_id);
+			 }
+		 }
 	}
 	
+	//Prints details of one stop
+	public static void printBusStop(BusStops bs) {
+		 if (bs != null) {
+				 System.out.printf("*********\n Stop ID:%s\n Stop Code:%s\n Stop Name:%s\n"
+				 		+ " Stop Desc:%s\n Stop Lat:%.6f\n Stop Lon:%.6f\n"
+				 		+ " Zone ID:%s\n\n",bs.stop_id,bs.stop_code,
+				 		bs.stop_name, bs.stop_desc, bs.stop_lat,
+				 		bs.stop_lon,bs.zone_id);
+		 }
+		 else {
+			 System.out.println("No such stop exists.");
+		 }
 	}
+	
+
+	public static void main (String[] args) {
+		 
+		
+		
+	}
+}
+	
+	
 
 	
 
