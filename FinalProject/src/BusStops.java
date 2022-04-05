@@ -126,7 +126,7 @@ public class BusStops extends TST{
 		 boolean end = false;
 		 
 			while(!end) {
-				 System.out.println("Please enter the name of the stop you wish to search (in block capitals e.g. HASTINGS): ");
+				 System.out.println("Please enter the name of the stop you wish to search (in block capitals e.g. 'HASTINGS'): ");
 				 if (input.hasNext()) {
 					 String searchStop = input.next();
 		 for (int i = 0; i< bs.size();i++) {
@@ -149,7 +149,7 @@ public class BusStops extends TST{
 		 System.out.println("This seach has been terminated.");}
 		 }
 		 else {
-			 System.out.println("Please enter a valid stop name (in block capitals e.g. HASTINGS)");
+			 System.out.println("Please enter a valid stop name (in block capitals e.g. 'HASTINGS')");
 			 end = false;
 		 }
 	  }
