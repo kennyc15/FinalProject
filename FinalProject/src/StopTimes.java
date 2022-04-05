@@ -109,8 +109,28 @@ public class StopTimes {
 
 	public static void main(String args[]) throws FileNotFoundException {
 		
-		ArrayList<StopTimes> st = searchByArrivalTime("05:25:25");
-		printStopTimes(st);
+		Scanner input = new Scanner(System.in);
+		boolean end = false;
+		while(!end) {
+		System.out.println("Enter desired arrival time (hh:mm:ss): ");
+		if (input.hasNext()) {
+			String inputTime = input.next();
+			if (validTime(inputTime)) {
+				printStopTimes(searchByArrivalTime(inputTime));
+				System.out.println("Would you like to enter a new time? ");
+				if (input.next().equalsIgnoreCase("yes")) {
+					end = false;
+				}
+				else {
+					end = true;
+					System.out.println("Search has been terminated.");
+				}
+			}
+			else {
+				System.out.println("Please enter a valid time to continue.");
+			}
+		}
+		}
 	
 	}
 	

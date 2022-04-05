@@ -2,7 +2,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class BusStops {
+public class BusStops extends TST{
 
 	public String stop_id;
 	public String stop_code;
@@ -115,8 +115,19 @@ public class BusStops {
 	
 
 	public static void main (String[] args) {
-		 
-		
+		 ArrayList<BusStops> bs = createBusStops("stops.txt");
+		 ArrayList<BusStops> b = createBusStops("stops.txt");
+		 TST<BusStops> tst = new TST<BusStops>();
+		 for(int i = 0; i<bs.size();i++) {
+		 String str = bs.get(i).stop_name;
+		 tst.put(str, bs.get(i));
+		 if (tst.keysWithPrefix(str)!=null) {
+			 b.add(bs.get(i));
+		 }
+		 }
+		 printBusStops(b);
+		 // Not printing text version
+		//System.out.print(iterableToString(tst.keysWithPrefix("KOOTEN")));
 		
 	}
 }
