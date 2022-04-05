@@ -90,7 +90,7 @@ public class BusStops extends TST{
 	public static void printBusStops(ArrayList<BusStops> bs) {
 		 if (bs != null) {
 			 for (int i = 0; i<bs.size();i++) {
-				 System.out.printf("*********\n Stop ID:%s\n Stop Code:%s\n Stop Name:%s\n"
+				 System.out.printf("\n*********\n Stop ID:%s\n Stop Code:%s\n Stop Name:%s\n"
 				 		+ " Stop Desc:%s\n Stop Lat:%.6f\n Stop Lon:%.6f\n"
 				 		+ " Zone ID:%s\n\n",bs.get(i).stop_id,bs.get(i).stop_code,
 				 		bs.get(i).stop_name, bs.get(i).stop_desc, bs.get(i).stop_lat,
@@ -115,23 +115,48 @@ public class BusStops extends TST{
 	
 
 	public static void main (String[] args) {
-		 ArrayList<BusStops> bs = createBusStops("stops.txt");
-		 ArrayList<BusStops> b = createBusStops("stops.txt");
-		 TST<BusStops> tst = new TST<BusStops>();
-		 for(int i = 0; i<bs.size();i++) {
-		 String str = bs.get(i).stop_name;
-		 tst.put(str, bs.get(i));
-		 if (tst.keysWithPrefix(str)!=null) {
-			 b.add(bs.get(i));
-		 }
-		 }
-		 printBusStops(b);
-		 // Not printing text version
-		//System.out.print(iterableToString(tst.keysWithPrefix("KOOTEN")));
 		
+		 ArrayList<BusStops> bs = createBusStops("stops.txt");
+		 
+		 TST<BusStops> tst = new TST<BusStops>();
+		 System.out.println("This search allows you to searh for a bus stop by stop name.");
+		 System.out.println("All matching stops found will be displayed.");
+		
+		 Scanner input = new Scanner(System.in);
+		 boolean end = false;
+		 
+			while(!end) {
+				 System.out.println("Please enter the name of the stop you wish to search: ");
+				 if (input.hasNext()) {
+					 String searchStop = input.next();
+		 for (int i = 0; i< bs.size();i++) {
+			 tst.put(bs.get(i).stop_name, bs.get(i));
+		 }
+		 
+		 Iterable<String> ItStr = tst.keysWithPrefix(searchStop);
+		 // Print each stop on a new line
+		 if (ItStr != null) {
+		 for (String s: ItStr) {
+			 for(int i = 0; i< bs.size();i++) {
+			    if(s.equals(bs.get(i).stop_name)){
+			    	printBusStop(bs.get(i));
+			    }
+			}
+		 }
+		 System.out.println("Would you like to search for another stop (yes/ no)?");
+		 if(input.next().equalsIgnoreCase("yes")) {end = false;}
+		 else {end = true;
+		 System.out.println("This seach has been terminated.");}
+		 }
+		 else {
+			 System.out.println("Please enter a valid stop name.");
+			 end = false;
+		 }
+	  }
+	}
 	}
 }
-	
+
 	
 
 	

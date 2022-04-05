@@ -1,7 +1,5 @@
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Queue;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TST<Value> 
 {
@@ -15,10 +13,6 @@ public class TST<Value>
  Node left, mid, right; // left, middle, and right subtries
  Value val; // value associated with string
  }
- 
- //public static String iterableToString(Iterable<String> str){
-	//   return Stream.of(str).map(String::valueOf).collect(Collectors.joining());
-	//}
 
  
  public Value get(String key)
@@ -54,71 +48,26 @@ public class TST<Value>
  return x;
  }
  
- public Iterable<String> keys() 
- { return keysWithPrefix(""); }
+ public Iterable<String> keysWithPrefix(String prefix) {
+		if (prefix == null) {
+			throw new IllegalArgumentException("keysWithPrefix() has null argument");
+		}
+		Queue<String> q = new LinkedList<String>();
+		Node x = get(root, prefix, 0);
+		if (x == null) return q;
+		if (x.val != null) q.add(prefix);
+		collect(x.mid, new StringBuilder(prefix), q);
+		return q;
+	}
  
- public Iterable<String> keysWithPrefix(String pre) 
- {
-  Queue<String> q = new Queue<String>();
-  collect(get(root, pre, 0), pre, q);
-  return q; 
- }
- private void collect(Node x, String pre,
-  Queue<String> q) 
- {
-  if (x == null) return;
-  if (x.val != null) {q.enqueue(pre);
-  for (char c = 0; c < 256; c++) {
-  collect(x.next[c], pre + c, q); 
-  }
-  }
- }
- 
- public class Queue<String> implements Iterable<String> { 
- 
-  private Node first; // link to least recently added node
-  private Node last; // link to most recently added node
-  private int N; // number of items on the queue
-  private class Node
-  { // nested class to define nodes
-  String item;
-  Node next;
-  }
-  public boolean isEmpty() { return first == null; } // Or: N == 0.
-  public int size() { return N; }
-  
-  public void enqueue(String item)
-  { // Add item to the end of the list.
-  Node oldlast = last;
-  last = new Node();
-  last.item = item;
-  last.next = null;
-  if (isEmpty()) first = last;
-  else oldlast.next = last;
-  N++;
-  }
-@Override
-public Iterator<String> iterator()
-{ return new ListIterator(); }
-private class ListIterator implements Iterator<String>
-{
-private Node current = first;
-public boolean hasNext()
-{ return current != null; }
-
-public String next()
-{
-String item = current.item;
-current = current.next; 
-return item;
-}
-
-} 
- 
-  } 
+ private void collect(Node x, StringBuilder prefix, Queue<String> q) {
+		if (x == null) return;
+		collect(x.left,  prefix, q);
+		if (x.val != null) q.add(prefix.toString() + x.c);
+		collect(x.mid,   prefix.append(x.c), q);
+		prefix.deleteCharAt(prefix.length() - 1);
+		collect(x.right, prefix, q);
+	}
 
 
-	 public static void main (String[] args) {
-		 
-}
 }
