@@ -5,62 +5,89 @@ import java.util.Scanner;
 public class ShortestPath 
 
 {
-    private final int MATRIX_SIZE = 12479;
-	private double matrix[][] = new double[MATRIX_SIZE][MATRIX_SIZE];
-	double stopTimesCost = 1;
-	public final double inf = Double.POSITIVE_INFINITY;
 
+	private double matrix[][];
+	private double distTo[][];
+	private int[][] edgeTo[][];
+	private int stopCost = 1;
+	private int immediateTransCost = 2;
+	public double inf = Double.POSITIVE_INFINITY;
 
-	public static void main(String[] args) throws FileNotFoundException 
-	{
+	//cannot yet initialize type 2 cost as need minTime
 
-	}
-
-	private void matrixBuilder() throws FileNotFoundException {
-
-		for(int i = 0; i < MATRIX_SIZE; i++)
-		{
-			for(int j = 0; j < MATRIX_SIZE; j++) 
-			{
-				if(i == j)
-				{
-
-					matrix[i][j] = 0;
+	
+	public void createMatrix() throws FileNotFoundException {
+		
+		//crate initial matrix
+		int transferType;
+		int prevTrip = 0;
+		int currTrip = 0;
+		double minTime;
+		
+		for (int i = 0; i< matrix.length; i++) {
+			for (int j = 0; j< matrix.length; j++) {
+				
+				if (i != j) {
+					matrix[i][j] = inf; //diagonals
 				}
-				else if (i != j){
-					matrix[i][j] = inf;
+				else {
+					matrix[i][j] = 0; //non-diagonals
 				}
 			}
+			
 		}
-
-
-		int src = 0; 
-		int dest = 0; 
-		String prevTrip = " ";
-		String thisTrip = " ";
-		int indirect; 
-		double minTime;
-
-		File stFile = new File("stop_times.txt");
-		Scanner scanST = new Scanner(stFile);
-
-		while (scanST.hasNextLine()) {
-			
-			String[] line = scanST.nextLine().split(",");
-			prevTrip = thisTrip;
-			thisTrip = line[0];
-			
-			src = dest;
-			dest = Integer.parseInt(line[3]);
-			
-				if(prevTrip.equalsIgnoreCase(thisTrip)) 
+		
+		File stopTimes = new File("stop_times.txt");
+		Scanner scanST = new Scanner(stopTimes);
+		scanST.useDelimiter(",");
+		
+		int depart = 0;
+		int arrive = 0;
 	
-				{
-					matrix[src][dest] = stopTimesCost;
-	
-				}
+		String line;
+		
+		while(scanST.hasNextLine()) {
 			
+			prevTrip = currTrip;
+			currTrip = scanST.nextInt();
+			
+			//skip next two elements to obtain stop id
+			scanST.next();
+			scanST.next();
+			
+			if(prevTrip == currTrip) {
+				matrix[depart][arrive] = stopCost;
+			}
+			
+			scanST.nextLine();
+		}
 		scanST.close();
-
-}
+		
+		//to read in transfer routes
+		File transfers = new File("transfers.txt");
+		Scanner scanTransfers = new Scanner(transfers);
+		
+		while(scanTransfers.hasNextLine()) {
+			line = scanTransfers.nextLine();
+			Scanner scanLine = new Scanner(line);
+			scanLine.useDelimiter(",");
+			
+			depart = scanLine.nextInt();
+			arrive = scanLine.nextInt();
+			transferType = scanLine.nextInt();
+			
+			if (transferType == 2) {
+				
+				minTime = scanLine.nextInt();
+	
+				matrix[depart][arrive] = (minTime/ (100));
+			}
+			
+			else if (transferType == 0) {
+				matrix[depart][arrive] =  immediateTransCost ;
+			}
+			scanLine.close();
 	}
+		scanTransfers.close();
+}
+}
