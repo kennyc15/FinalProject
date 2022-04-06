@@ -2,62 +2,65 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class ShortestPath {
-	
-	public final int LAST_STOP_NUMBER = 12034;
-	public final int INF = Integer.MAX_VALUE;
-	double[][] matrix = new double[LAST_STOP_NUMBER][LAST_STOP_NUMBER];
-	int stopTimesCost = 1;
-	int transferType0Cost = 2;
-	
-	public ShortestPath() {
-		// TODO Auto-generated constructor stub
+public class ShortestPath 
+
+{
+    private final int MATRIX_SIZE = 12479;
+	private double matrix[][] = new double[MATRIX_SIZE][MATRIX_SIZE];
+	double stopTimesCost = 1;
+	public final double inf = Double.POSITIVE_INFINITY;
+
+
+	public static void main(String[] args) throws FileNotFoundException 
+	{
+
 	}
 
-	
-	public void createMatrix() {
-		for(int i = 0; i < 12479; i++)
+	private void matrixBuilder() throws FileNotFoundException {
+
+		for(int i = 0; i < MATRIX_SIZE; i++)
 		{
-			for(int j = 0; j < 12479; j++) 
+			for(int j = 0; j < MATRIX_SIZE; j++) 
 			{
-				if(i != j)
+				if(i == j)
 				{
-					matrix[i][j] = INF;
-				}
-				else {
+
 					matrix[i][j] = 0;
 				}
+				else if (i != j){
+					matrix[i][j] = inf;
+				}
 			}
-		}
-		
-		File stop_times = new File("stop_times.txt");
-		File transfers = new File("transfers.txt");
-		
-		int src = 0; 
-		int dest = 0; 
-		int prevTripId = 0;
-		int nextTripId = 0;
-		double cost = stopTimesCost ;
-		double minTime;
-		int indirect; 
-		String currentLine;
-		
-		try {
-			Scanner scanStopTimes = new Scanner(stop_times);
-			Scanner scanTransfers = new Scanner(transfers);
-			
-			while(scanStopTimes.hasNextLine()) {
-				
-				currentLine = scanStopTimes.nextLine();
-				Scanner line = new Scanner(currentLine);
-				line.split(",");
-			}
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
-		
-	}
+
+		int src = 0; 
+		int dest = 0; 
+		String prevTrip = " ";
+		String thisTrip = " ";
+		int indirect; 
+		double minTime;
+
+		File stFile = new File("stop_times.txt");
+		Scanner scanST = new Scanner(stFile);
+
+		while (scanST.hasNextLine()) {
+			
+			String[] line = scanST.nextLine().split(",");
+			prevTrip = thisTrip;
+			thisTrip = line[0];
+			
+			src = dest;
+			dest = Integer.parseInt(line[3]);
+			
+				if(prevTrip.equalsIgnoreCase(thisTrip)) 
+	
+				{
+					matrix[src][dest] = stopTimesCost;
+	
+				}
+			
+		scanST.close();
+
 }
+	}
