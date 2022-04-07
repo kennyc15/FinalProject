@@ -124,6 +124,7 @@ public class StopTimes {
 				else {
 					end = true;
 					System.out.println("Search has been terminated.");
+					Interface.main(args);
 				}
 			}
 			else {

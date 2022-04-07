@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -114,13 +115,13 @@ public class BusStops extends TST{
 	}
 	
 
-	public static void main (String[] args) {
+	public static void main (String[] args) throws FileNotFoundException {
 		
 		 ArrayList<BusStops> bs = createBusStops("stops.txt");
 		 
 		 TST<BusStops> tst = new TST<BusStops>();
-		 System.out.println("This search allows you to searh for a bus stop by stop name.");
-		 System.out.println("All matching stops found will be displayed.");
+		 //System.out.println("This search allows you to searh for a bus stop by stop name.");
+		 //System.out.println("All matching stops found will be displayed.");
 		
 		 Scanner input = new Scanner(System.in);
 		 boolean end = false;
@@ -134,6 +135,7 @@ public class BusStops extends TST{
 		 }
 		 
 		 Iterable<String> ItStr = tst.keysWithPrefix(searchStop);
+		 //System.out.println(ItStr);
 		 // Print each stop on a new line
 		 if (ItStr != null) {
 		 for (String s: ItStr) {
@@ -146,7 +148,8 @@ public class BusStops extends TST{
 		 System.out.println("Would you like to search for another stop (yes/ no)?");
 		 if(input.next().equalsIgnoreCase("yes")) {end = false;}
 		 else {end = true;
-		 System.out.println("This seach has been terminated.");}
+		 System.out.println("This search has been terminated.\n");
+		 Interface.main(args);}
 		 }
 		 else {
 			 System.out.println("Please enter a valid stop name (in block capitals e.g. 'HASTINGS')");
@@ -154,6 +157,7 @@ public class BusStops extends TST{
 		 }
 	  }
 	}
+			input.close();
 	}
 }
 

@@ -25,6 +25,7 @@ public class ShortestPath {
 	
 	
 	public static void main(String[] args) throws FileNotFoundException {
+		
 		findShortestPath(646,378);
 	}
 	
@@ -82,11 +83,11 @@ public class ShortestPath {
 		scanLine = new Scanner(line);
 		scanLine.useDelimiter(",");
 		
-		//Problem here with an input mismatch 
+	
 		if(scanLine.hasNextInt()) {
 		
 		departStop = scanLine.nextInt();
-		//System.out.println(departStop);
+		
 		arriveStop = scanLine.nextInt();
 		transferType = scanLine.nextInt();
 		
@@ -132,7 +133,27 @@ public class ShortestPath {
     	distTo[arrive] = 0; 
     	int node = depart;
     	int stopsVisited = 0;
-		
+    	
+		/*
+		 while(visitedCounter < distTo.length)
+	    	{
+	    		for(int i = 0; i < matrix[currentNode].length; i ++) {
+	    			if(!Double.isInfinite(matrix[currentNode][i]) && visited[i] == 0) {
+	        			relaxEdge(currentNode, i, distTo, edgeTo);
+	        		}
+	    		}
+	    		visited[currentNode] = 1;
+	    		System.out.println(edgeTo[to]);
+	    		double shortestDist = Integer.MAX_VALUE;
+	    		for(int i = 0; i < distTo.length; i++) {
+	    			if(visited[i] != 1 && shortestDist > distTo[i]) {
+	    				currentNode = i;
+	    				shortestDist = distTo[i];
+	    			}
+	    		}
+	    		visitedCounter++;
+	    	}
+		 */
     	while(stopsVisited < n) {
     		for(int i = 0; i < matrix[node].length;i++) 
     		 {
@@ -141,15 +162,15 @@ public class ShortestPath {
     			}
     		}
     		visited[node] = 1;
-    		
-    		double minDist = INF;
+    		//System.out.println(edgeTo[arrive]);
+    		double minDist = Integer.MAX_VALUE;
     		for(int i = 0; i < n; i++) {
     			if(visited[i] != 1 && minDist > distTo[i]) {
     				node = i;
     				minDist = distTo[i];
     			}
     		}
-    		stopsVisited = stopsVisited + 1;
+    		stopsVisited++;
     	}
 		
     	if(distTo[arrive] == INF) {
@@ -157,14 +178,17 @@ public class ShortestPath {
     		return output;
     	}
     	
+    	//System.out.println(distTo[6]);
     	int x = depart;
     	int y = arrive;
     	String path = "";
-    	while(x!=y) {
-    		path =  edgeTo[y] + ","+path;
+    	System.out.print(edgeTo[y]);
+    	while(x != y) 
+		{
+			path =  edgeTo[y] + path;
 			y = edgeTo[y];
-    	}
-    	path = path + ", " + arrive;
+		}
+		path = path + "," +  arrive;
     	output = "Departure Stop: " + depart +
 				"\nArrival Stop: " + arrive +
 				"\nCost: " + Double.toString(distTo[arrive]) +
