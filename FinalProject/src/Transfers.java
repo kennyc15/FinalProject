@@ -1,3 +1,4 @@
+
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -12,7 +13,7 @@ public class Transfers {
 		
 		Transfers(String fromStopId, String toStopId, String transferType, int minTransferTime) {
 			
-		this.from_stop_id = toStopId;
+		this.from_stop_id = fromStopId;
 		this.to_stop_id = toStopId;
 		this.transfer_type = transferType;
 		this.min_transfer_time = minTransferTime;
