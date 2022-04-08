@@ -44,16 +44,19 @@ public class ShortestPath extends DijkstraSP{
 		ArrayList<Transfers> trans = new ArrayList<Transfers>();
 		ArrayList<DirectedEdge> edges = new ArrayList<DirectedEdge>();
 		trans = createTransfers("transfers.txt");
-		for (int i = 0; i< trans.size();i++) {
-			if(trans.get(i).transfer_type.equalsIgnoreCase("0")) {
-			DirectedEdge de = new DirectedEdge(Integer.parseInt(trans.get(i).from_stop_id), 
-					Integer.parseInt(trans.get(i).to_stop_id),1);
+		for (int i = 0; i< trans.size()-1;i++) {
+			if(trans.get(i+1).transfer_type.equalsIgnoreCase("0")) {
+				//System.out.println(trans.get(i+1).from_stop_id);
+			DirectedEdge de = new DirectedEdge(Integer.parseInt(trans.get(i+1).from_stop_id), 
+					Integer.parseInt(trans.get(i+1).to_stop_id),1);
 			edges.add(de);
+			
 		}
-			else if(trans.get(i).transfer_type.equalsIgnoreCase("2")) {
-				DirectedEdge de = new DirectedEdge(Integer.parseInt(trans.get(i).from_stop_id), 
-						Integer.parseInt(trans.get(i).to_stop_id),trans.get(i).min_transfer_time/100);
+			else if(trans.get(i+1).transfer_type.equalsIgnoreCase("2")) {
+				DirectedEdge de = new DirectedEdge(Integer.parseInt(trans.get(i+1).from_stop_id), 
+						Integer.parseInt(trans.get(i+1).to_stop_id),trans.get(i+1).min_transfer_time/100);
 				edges.add(de);
+				//System.out.println(de);
 			}
 		}
 		return edges;
