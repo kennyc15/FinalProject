@@ -137,6 +137,7 @@ public class StopTimes {
 			}
 		}
 		}
+		input.close();
 	
 	}
 	

@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+//create Bus Stop Object
 public class BusStops extends TST{
 
 	public String stop_id;
@@ -32,6 +33,7 @@ public class BusStops extends TST{
 	
 	}
 	
+	//read in files and return array list of bus stop objects
 	public static ArrayList<BusStops> createBusStops(String filename){
 
 		ArrayList<BusStops> stopDetails = new ArrayList<BusStops>();
@@ -46,6 +48,8 @@ public class BusStops extends TST{
 
 		String stopid = line[0];
 		String stopcode = "";
+		
+		//Catch null arguments
 		if(!line[1].contains(" ")){
 			stopcode = line[1];
 		}
@@ -56,19 +60,26 @@ public class BusStops extends TST{
 		String zoneID = line[6];
 		String stopURL = line[7];
 		int location = Integer.parseInt(line[8]);
+		
+		// not reading index 9, changed index format but still == 9
 		String parent  = line[line.length - 1];
+		
+		//Create the Bus Stop Object
 		BusStops bs = new BusStops(stopid, stopcode, stopname, stopDesc, stoplat, stopLon, zoneID, 
 				stopURL, location, parent);
+		
+		//Add object to array list
 		stopDetails.add(bs);
 
 	}
 		scan.close();
 		return stopDetails;
 	} catch (Exception e) {System.out.println(e);
-		return stopDetails;
+		return stopDetails; 
 	}
 	}
 	
+	// Remove recurring characters from beginning of stop name and place at end
 	public static String formatStopName(String str) {
 		
 		String first = str.split(" ")[0];
@@ -119,46 +130,66 @@ public class BusStops extends TST{
 		
 		 ArrayList<BusStops> bs = createBusStops("stops.txt");
 		 
+		 //create TST object
 		 TST<BusStops> tst = new TST<BusStops>();
-		 //System.out.println("This search allows you to searh for a bus stop by stop name.");
-		 //System.out.println("All matching stops found will be displayed.");
+		
 		
 		 Scanner input = new Scanner(System.in);
 		 boolean end = false;
 		 
 			while(!end) {
-				 System.out.println("Please enter the name of the stop you wish to search (in block capitals e.g. 'HASTINGS'): ");
+				 System.out.println("Please enter the name of the stop you wish to search: ");
 				 if (input.hasNext()) {
-					 String searchStop = input.next();
+					 
+					 //disregard case of input 
+					 String searchStop = input.next().toUpperCase();
+					 
+					 //add stop names to TST
 		 for (int i = 0; i< bs.size();i++) {
 			 tst.put(bs.get(i).stop_name, bs.get(i));
 		 }
 		 
+		 //Call keys with prefix method and return iterable string
 		 Iterable<String> ItStr = tst.keysWithPrefix(searchStop);
-		 //System.out.println(ItStr);
-		 // Print each stop on a new line
-		 if (ItStr != null) {
+		System.out.println(iterableSize(ItStr));
+		 if (iterableSize(ItStr) != 0) { 
 		 for (String s: ItStr) {
 			 for(int i = 0; i< bs.size();i++) {
-			    if(s.equals(bs.get(i).stop_name)){
+			    if(s.equalsIgnoreCase(bs.get(i).stop_name)){
 			    	printBusStop(bs.get(i));
 			    }
 			}
 		 }
-		 System.out.println("Would you like to search for another stop (yes/ no)?");
+		 System.out.println(iterableSize(ItStr) + " results for this search.");
+		 System.out.println("\nWould you like to search for another stop (yes/ no)?");
+		 
+		 // if yes, run again
 		 if(input.next().equalsIgnoreCase("yes")) {end = false;}
 		 else {end = true;
+		 
+		 // otherwise, return to interface
 		 System.out.println("This search has been terminated.\n");
 		 Interface.main(args);}
 		 }
 		 else {
-			 System.out.println("Please enter a valid stop name (in block capitals e.g. 'HASTINGS')");
+			 
+			 //Prompt correct input if no stop found
+			 System.out.println("This stop does not exist or has been entered incorrectly.\n");
 			 end = false;
 		 }
-	  }
-	}
+	    }
+			}
 			input.close();
 	}
+			
+	//used in error handling (to check for empty iterable string)
+   public static int iterableSize(Iterable<String> ItStr) {
+	   int size = 0;
+	   for(String s : ItStr) {
+	      size++;
+	   }
+	   return size;
+   }
 }
 
 	
