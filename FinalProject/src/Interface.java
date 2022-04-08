@@ -9,7 +9,7 @@ public class Interface {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		
-		System.out.println("Thank you for choosing Vancouver Bus.");
+		System.out.println("Thank you for choosing Vancouver Buses.");
 		
 		Scanner scan = new Scanner(System.in);
 		boolean quit = false;
@@ -20,16 +20,17 @@ public class Interface {
 			System.out.println("- If you would like to calculate the mimimum cost of a journey,"
 					+ " enter '3': ");
 			if (scan.hasNext()) {
-				if(scan.next().equalsIgnoreCase("1")){
+				String input = scan.next();
+				if(input.equalsIgnoreCase("1")){
 					StopTimes.main(args);
 				}
-				else if (scan.next().equalsIgnoreCase("2")) {
+				else if (input.equalsIgnoreCase("2")) {
 					BusStops.main(args);
 				}
-				else if (scan.next().equalsIgnoreCase("3")) {
+				else if (input.equalsIgnoreCase("3")) {
 					//ShortestPath.main(args);
 				}
-				else if (scan.next().equalsIgnoreCase("quit")){
+				else if (input.equalsIgnoreCase("quit")){
 					System.out.println("Thank you for travelling with us,");
 					System.out.println("Have a safe trip!");
 					quit = true;

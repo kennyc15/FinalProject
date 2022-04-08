@@ -1,207 +1,173 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class ShortestPath {
+public class ShortestPath extends DijkstraSP{
 	
-	public static double[][] matrix = new double[12479][12479];
-	public static final double INF = Double.POSITIVE_INFINITY;
+	public ShortestPath(EdgeWeightedDigraph G, int s) {
+		super(G, s);
+		// TODO Auto-generated constructor stub
+	}
 
-	public ShortestPath() {
-		// TODO Auto-generated constructor stubShortestRoutes() {
+	public static void createMatrix() throws FileNotFoundException {
+   
+		EdgeWeightedDigraph ewd = new EdgeWeightedDigraph(12479);
+		ArrayList<DirectedEdge> de1 = createTransfersGraph();
+		ArrayList<DirectedEdge> de2 = createStopTimesGraph();
+		for(int i = 0; i< de1.size();i++) {
+			ewd.addEdge(de1.get(i));
+		}
+		for(int i = 0; i< de2.size();i++) {
+			ewd.addEdge(de2.get(i));
+		}
+	   DijkstraSP dsp = new DijkstraSP(ewd, 12479);
+	   System.out.println(dsp.distTo(379));
+}
+	
+	public static void main(String args[]) {
 		try {
 			createMatrix();
 		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+		};
+	}
+	
+	
+	
+	public static ArrayList<DirectedEdge> createTransfersGraph(){
+		
+		ArrayList<Transfers> trans = new ArrayList<Transfers>();
+		ArrayList<DirectedEdge> edges = new ArrayList<DirectedEdge>();
+		trans = createTransfers("transfers.txt");
+		for (int i = 0; i< trans.size();i++) {
+			if(trans.get(i).transfer_type.equalsIgnoreCase("0")) {
+			DirectedEdge de = new DirectedEdge(Integer.parseInt(trans.get(i).from_stop_id), 
+					Integer.parseInt(trans.get(i).to_stop_id),1);
+			edges.add(de);
 		}
-	}
-	
-	public static void findShortestPath(int a, int b) throws FileNotFoundException {
-		
-		createMatrix();
-		System.out.print(shortestPath(a,b));
-	}
-	
-	
-	public static void main(String[] args) throws FileNotFoundException {
-		
-		findShortestPath(646,378);
-	}
-	
-	public static void createMatrix() throws FileNotFoundException {
-		
-		
-		int transferType;
-		double minTransTime;
-		
-	for (int i = 0; i < 12479; i++) {
-		for (int j = 0; j< 12479; j++) {
-			if (i != j) {
-				matrix[i][j] = INF; //diagonals
-			}
-			else {
-				matrix[i][j] = 0;
+			else if(trans.get(i).transfer_type.equalsIgnoreCase("2")) {
+				DirectedEdge de = new DirectedEdge(Integer.parseInt(trans.get(i).from_stop_id), 
+						Integer.parseInt(trans.get(i).to_stop_id),trans.get(i).min_transfer_time/100);
+				edges.add(de);
 			}
 		}
+		return edges;
+	}
+	
+	public static ArrayList<Transfers> createTransfers(String filename){
+		
+		ArrayList<Transfers> transferDetails = new ArrayList<Transfers>();
+	
+		try {
+			FileReader fr = new FileReader(filename);
+			Scanner scan = new Scanner(fr);
+			
+			while (scan.hasNextLine()) {
+				
+			String[] line = scan.nextLine().split(",");
+			
+			String fromStopid = line[0];
+			String toStopid = line[1];
+			String transferType = line[2];
+			int minTranstime =  Integer.parseInt((line[line.length - 1]));
+			
+			Transfers transfer = new Transfers(fromStopid, toStopid,transferType, minTranstime);
+			transferDetails.add(transfer);
+		
+	}
+		scan.close();
+		return transferDetails;
+		
+	} 
+		catch (Exception e) {
+	   System.out.println(e);
+	   return transferDetails;
+	}
 	}
 	
 	
-	File stopTimes = new File("stop_times.txt");
-	Scanner scan = new Scanner(stopTimes);
-	scan.useDelimiter(",");
-	
-	int departStop = 0;
-	int arriveStop = 0;
-	int prevTripId = 0;
-	int nextTripId = 0;
-	String line = " ";
-	
-	while(scan.hasNextLine()) {
-		prevTripId = nextTripId;
-		nextTripId = scan.nextInt();
-	
-		for(int i = 0; i< 2;i++) {
-			scan.next();
-		}
-		departStop = arriveStop;
-		arriveStop = scan.nextInt();
+public static ArrayList<StopTimes> createStopTimes(String filename){
 		
-		if(prevTripId == nextTripId) {
-			matrix[departStop][arriveStop] = 1;
+		ArrayList<StopTimes> stopTimesDetails = new ArrayList<StopTimes>();
+		
+		try {
+			FileReader fr = new FileReader(filename);
+			Scanner scan = new Scanner(fr);
+			
+			
+		while (scan.hasNextLine()) {
+			
+		String[] line = scan.nextLine().split(",");
+		
+			
+		int tripid = Integer.parseInt(line[0]);
+
+		//validate time to correct format hh:mm:ss
+		String arrival_time = "-1";
+		if (validTime(line[1])) {
+		arrival_time = line[1];
 		}
-		scan.nextLine();
+		
+		//validate time to correct format hh:mm:ss
+		String departure_time = "-1";
+		if (validTime(line[2])) {
+		departure_time = line[2];
+		}
+		
+		int stop_id = Integer.parseInt(line[3]);
+		String stop_sequence= line[4];
+		String stopHead = line[5];
+		String pickUp = line[6];
+		String dropOff = line[7];
+		String shape_dist_traveled  = line[line.length - 1];
+		
+		StopTimes st = new StopTimes(tripid, arrival_time, departure_time, stop_id, stop_sequence,
+				stopHead, pickUp, dropOff, shape_dist_traveled);
+		stopTimesDetails.add(st);
+		
 	}
-	scan.close();
-	
-	FileReader transfers = new FileReader("transfers.txt");
-	Scanner scanner = new Scanner(transfers);
-	Scanner scanLine = null;
-	
-	while (scanner.hasNextLine()) {
-		line = scanner.nextLine();
-		scanLine = new Scanner(line);
-		scanLine.useDelimiter(",");
+		scan.close();
+		return stopTimesDetails;
 		
-	
-		if(scanLine.hasNextInt()) {
-		
-		departStop = scanLine.nextInt();
-		
-		arriveStop = scanLine.nextInt();
-		transferType = scanLine.nextInt();
-		
-		if(transferType == 0) {
-			matrix[departStop][arriveStop] = 2;
-		}
-		else if(transferType ==2) {
-			minTransTime = scanLine.nextDouble();
-			matrix[departStop][arriveStop] = ( minTransTime/ 100 );
-		}
-		}
-		scanLine.close();
+	} catch (Exception e) {
+		System.out.println(e);
+		return stopTimesDetails;
 	}
-	scanner.close();
-	
-	}
-	
-	public static String shortestPath(int depart, int arrive) {
-		
-		String output = " ";
-		int[] visited = new int[12479];
-		int[] edgeTo = new int[12479];
-		double[] distTo = new double[12479];
-		
-		if(depart == arrive) {
-			output = "Departure Stop: " + depart +
-					"\nArrival Stop: " + arrive +
-					"\nCost: " + matrix[depart][arrive] +
-					"\nNo other stops on this route.";
-			return output;
-		}
-		
-		int n = distTo.length;
-		
-		for(int i = 0; i < n; i++) {
-    		if(depart != i)
-    		{
-    			distTo[i] = INF;
-    		}
-    	}
-		
-		visited[depart] = 1;
-    	distTo[arrive] = 0; 
-    	int node = depart;
-    	int stopsVisited = 0;
-    	
-		/*
-		 while(visitedCounter < distTo.length)
-	    	{
-	    		for(int i = 0; i < matrix[currentNode].length; i ++) {
-	    			if(!Double.isInfinite(matrix[currentNode][i]) && visited[i] == 0) {
-	        			relaxEdge(currentNode, i, distTo, edgeTo);
-	        		}
-	    		}
-	    		visited[currentNode] = 1;
-	    		System.out.println(edgeTo[to]);
-	    		double shortestDist = Integer.MAX_VALUE;
-	    		for(int i = 0; i < distTo.length; i++) {
-	    			if(visited[i] != 1 && shortestDist > distTo[i]) {
-	    				currentNode = i;
-	    				shortestDist = distTo[i];
-	    			}
-	    		}
-	    		visitedCounter++;
-	    	}
-		 */
-    	while(stopsVisited < n) {
-    		for(int i = 0; i < matrix[node].length;i++) 
-    		 {
-    			if((visited[i] ==0) && (matrix[node][i]!=INF) ) {
-    				relaxEdge(node, i, distTo, edgeTo);
-    			}
-    		}
-    		visited[node] = 1;
-    		//System.out.println(edgeTo[arrive]);
-    		double minDist = Integer.MAX_VALUE;
-    		for(int i = 0; i < n; i++) {
-    			if(visited[i] != 1 && minDist > distTo[i]) {
-    				node = i;
-    				minDist = distTo[i];
-    			}
-    		}
-    		stopsVisited++;
-    	}
-		
-    	if(distTo[arrive] == INF) {
-			output = "No possible route.";
-    		return output;
-    	}
-    	
-    	//System.out.println(distTo[6]);
-    	int x = depart;
-    	int y = arrive;
-    	String path = "";
-    	System.out.print(edgeTo[y]);
-    	while(x != y) 
-		{
-			path =  edgeTo[y] + path;
-			y = edgeTo[y];
-		}
-		path = path + "," +  arrive;
-    	output = "Departure Stop: " + depart +
-				"\nArrival Stop: " + arrive +
-				"\nCost: " + Double.toString(distTo[arrive]) +
-				"\nVia Stop: " + path;
-		return output;
 	}
 
-	private static void relaxEdge(int node, int dest, double[] distTo, int[] edgeTo) {
-		// TODO Auto-generated method stub
-		if(distTo[dest] > distTo[node] + matrix[node][dest]) {
-    		distTo[dest] = distTo[node] + matrix[node][dest];
-    		edgeTo[dest] = node;
-	}
+public static boolean validTime(String time) {
+	 
+	 String format = "((\\s?)[0-9]|[01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
+	 Pattern p = Pattern.compile(format);
+	 if (time == null) {
+           return false;
+  }
+	 Matcher m1 = p.matcher(time);
+
+       return m1.matches();	
 }
-	
+
+public static ArrayList<DirectedEdge> createStopTimesGraph(){
+	 
+	 ArrayList<StopTimes> st = new ArrayList<StopTimes>();
+		ArrayList<DirectedEdge> edges = new ArrayList<DirectedEdge>();
+		st = createStopTimes("stop_times.txt");
+		
+		for (int i = 0; i<(st.size()-1); i++) {
+			if (st.get(i).trip_id==st.get(i+1).trip_id) {
+				DirectedEdge de = new DirectedEdge(st.get(i).stop_id,st.get(i+1).stop_id,
+						1);
+				edges.add(de);
+			}
+		}
+		return edges;
+}
+
+
+
 }

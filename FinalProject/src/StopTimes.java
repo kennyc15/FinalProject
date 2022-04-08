@@ -223,6 +223,22 @@ public class StopTimes {
 			}
 			else{return false; }
 		}
+	 
+	 public ArrayList<DirectedEdge> createStopTimesGraph(){
+		 
+		 ArrayList<StopTimes> st = new ArrayList<StopTimes>();
+			ArrayList<DirectedEdge> edges = new ArrayList<DirectedEdge>();
+			st = createStopTimes("stop_times.txt");
+			
+			for (int i = 0; i<(st.size()-1); i++) {
+				if (st.get(i).trip_id==st.get(i+1).trip_id) {
+					DirectedEdge de = new DirectedEdge(st.get(i).stop_id,st.get(i+1).stop_id,
+							1);
+					edges.add(de);
+				}
+			}
+			return edges;
+	 }
 
 
 }

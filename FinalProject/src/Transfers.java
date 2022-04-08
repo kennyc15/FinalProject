@@ -21,6 +21,10 @@ public class Transfers {
 		
 		}
 		
+		public static void main(String[] args) {
+			//System.out.print(createTransfers("transfers.txt").get(0).from_stop_id);
+		}
+		
 		public static String getFromStop(Transfers trans) {
 			return trans.from_stop_id;
 		}
@@ -59,7 +63,25 @@ public class Transfers {
 		   return transferDetails;
 		}
 	}
-		
+		/*public ArrayList<DirectedEdge> createTransfersGraph(){
+			
+			ArrayList<Transfers> trans = new ArrayList<Transfers>();
+			ArrayList<DirectedEdge> edges = new ArrayList<DirectedEdge>();
+			trans = createTransfers("transfers.txt");
+			for (int i = 0; i< trans.size();i++) {
+				if(trans.get(i).transfer_type.equalsIgnoreCase("0")) {
+				DirectedEdge de = new DirectedEdge(Integer.parseInt(trans.get(i).from_stop_id), 
+						Integer.parseInt(trans.get(i).to_stop_id),1);
+				edges.add(de);
+			}
+				else if(trans.get(i).transfer_type.equalsIgnoreCase("2")) {
+					DirectedEdge de = new DirectedEdge(Integer.parseInt(trans.get(i).from_stop_id), 
+							Integer.parseInt(trans.get(i).to_stop_id),trans.get(i).min_transfer_time/100);
+					edges.add(de);
+				}
+			}
+			return edges;
+		}*/
 		
 		}
 

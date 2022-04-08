@@ -115,7 +115,7 @@ public class BusStops extends TST{
 	}
 	
 
-	public static void main (String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws FileNotFoundException {
 		
 		 ArrayList<BusStops> bs = createBusStops("stops.txt");
 		 
