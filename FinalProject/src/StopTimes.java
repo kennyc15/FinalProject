@@ -34,6 +34,11 @@ public class StopTimes {
 	}
 	
 	
+	public StopTimes() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public static String getStopHead(StopTimes st) {
 		
 		return st.stop_headsign;
@@ -224,7 +229,7 @@ public class StopTimes {
 			else{return false; }
 		}
 	 
-	 public ArrayList<DirectedEdge> createStopTimesGraph(){
+	 public static ArrayList<DirectedEdge> createStopTimesGraph(){
 		 
 		 ArrayList<StopTimes> st = new ArrayList<StopTimes>();
 			ArrayList<DirectedEdge> edges = new ArrayList<DirectedEdge>();

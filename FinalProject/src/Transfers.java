@@ -21,6 +21,10 @@ public class Transfers {
 		
 		}
 		
+		public Transfers() {
+			// TODO Auto-generated constructor stub
+		}
+
 		public static void main(String[] args) {
 			createTransfersGraph();
 		}
@@ -55,6 +59,7 @@ public class Transfers {
 			
 		}
 			scan.close();
+			System.out.println(transferDetails);
 			return transferDetails;
 			
 		} 
