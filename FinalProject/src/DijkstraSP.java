@@ -155,12 +155,4 @@ public class DijkstraSP {
             throw new IllegalArgumentException("vertex " + v + " is not between 0 and " + (V-1));
     }
 
-    /**
-     * Unit tests the {@code DijkstraSP} data type.
-     *
-     * @param args the command-line arguments
-     */
-    public static void main(String[] args) {
-        
-}
 }
