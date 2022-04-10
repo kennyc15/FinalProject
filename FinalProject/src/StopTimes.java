@@ -130,14 +130,22 @@ public class StopTimes {
 			
 			//check for valid user input
 			if (validTime(inputTime)) {
-				printStopTimes(searchByArrivalTime(inputTime));
-				System.out.println("Would you like to enter a new time? ");
+				ArrayList<StopTimes> st = searchByArrivalTime(inputTime);
+				
+				if (st.size() != 0){
+				printStopTimes(st);
+				System.out.println(st.size() + " results found for this search.\n");
+				}
+				else {
+					System.out.println("No trips found for this arrival time.");
+				}
+				System.out.println("Would you like to enter a new time? ( yes/no ) ");
 				if (input.next().equalsIgnoreCase("yes")) {
 					end = false;
 				}
 				else {
 					end = true;
-					System.out.println("Search has been terminated.");
+					System.out.println("Search has been terminated.\n");
 					Interface.main(args);
 				}
 			}

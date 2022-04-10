@@ -46,16 +46,18 @@ public class ShortestPath extends DijkstraSP{
 		}
 		
 		//Create SP object with EWD and the source node (as inputed by user)
-		double d = Double.MAX_VALUE;
-		if (source > ewd.V() || source < ewd.V()) {
+				double d = Double.MAX_VALUE;
+				if (source > 12481 || source < 0) {
+					d = -1;
+					   return d;
+				   }
+				else {
+			   DijkstraSP dsp = new DijkstraSP(ewd, source);
+			   d = dsp.distTo(sink);
 			   return d;
-		   }
-		else {
-	   DijkstraSP dsp = new DijkstraSP(ewd, source);
-	   d = dsp.distTo(sink);
-	   return d;
+				}
 		}
-  }
+  
 	
 	public static void main(String args[]) {
 		
@@ -63,47 +65,32 @@ public class ShortestPath extends DijkstraSP{
 		boolean end = false;
 		while(!end) {
 		System.out.println("Enter departure Stop ID: ");
-		int source = 0;
-		int sink = 0;
-		source = input.nextInt();
+		int source = input.nextInt();
 		System.out.println("Enter arrival Stop ID: ");
-		sink = input.nextInt();
+		int sink = input.nextInt();
 		try {
-			
-			//Call the above method
 			double cost = createMatrix(source, sink);
-			if (cost != Double.MAX_VALUE) {
+			if (cost != Double.MAX_VALUE && cost > 0) {
 			System.out.println("\nDeparture Stop: " + source);
-			System.out.println("Arrival Stop: " + sink);
-			System.out.println("Minimum Cost: " + cost);
-			System.out.println("\nWould you like to calculate the minimum cost of "
+			System.out.println("\nArrival Stop: " + sink);
+			System.out.println("\nMinimum Cost: " + cost);
+			}
+			else {
+				System.out.println("\nNo route possible.");
+			}
+			System.out.println("\n\nWould you like to calculate the minimum cost of "
 					+ "another route? (yes/ no) ");
 			if (input.next().equalsIgnoreCase("yes")) {
 				end = false;
-		  }
-		else {
-			end = true;
-			//Return to interface
-			Interface.main(args);
-		}
 			}
-			else {
-				System.out.println("No route possible.");
-				System.out.println("\nWould you like to calculate the minimum cost of "
-						+ "another route? (yes/ no) ");
-				if (input.next().equalsIgnoreCase("yes")) {
-					end = false;
-			  }
 			else {
 				end = true;
-				//Return to interface
 				Interface.main(args);
-			}
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 	  }
     input.close();
 }

@@ -151,7 +151,7 @@ public class BusStops extends TST{
 		 
 		 //Call keys with prefix method and return iterable string
 		 Iterable<String> ItStr = tst.keysWithPrefix(searchStop);
-		System.out.println(iterableSize(ItStr));
+		//System.out.println(iterableSize(ItStr));
 		 if (iterableSize(ItStr) != 0) { 
 		 for (String s: ItStr) {
 			 for(int i = 0; i< bs.size();i++) {
@@ -165,8 +165,8 @@ public class BusStops extends TST{
 		 
 		 // if yes, run again
 		 if(input.next().equalsIgnoreCase("yes")) {end = false;}
-		 else {end = true;
-		 
+		 else 
+		 {end = true;
 		 // otherwise, return to interface
 		 System.out.println("This search has been terminated.\n");
 		 Interface.main(args);}
