@@ -46,7 +46,7 @@ public class ShortestPath extends DijkstraSP{
 		}
 		
 		//Create SP object with EWD and the source node (as inputed by user)
-				double d = Double.MAX_VALUE;
+				double d = Double.POSITIVE_INFINITY;
 				if (source > 12481 || source < 0) {
 					d = -1;
 					   return d;
@@ -54,6 +54,7 @@ public class ShortestPath extends DijkstraSP{
 				else {
 			   DijkstraSP dsp = new DijkstraSP(ewd, source);
 			   d = dsp.distTo(sink);
+			   //System.out.println(d);
 			   return d;
 				}
 		}
@@ -70,7 +71,7 @@ public class ShortestPath extends DijkstraSP{
 		int sink = input.nextInt();
 		try {
 			double cost = createMatrix(source, sink);
-			if (cost != Double.MAX_VALUE && cost > 0) {
+			if (cost != Double.POSITIVE_INFINITY && cost > 0) {
 			System.out.println("\nDeparture Stop: " + source);
 			System.out.println("\nArrival Stop: " + sink);
 			System.out.println("\nMinimum Cost: " + cost);
